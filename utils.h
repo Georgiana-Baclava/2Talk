@@ -63,6 +63,7 @@ void start_Chat(char recv_name[MAX], int send_sockfd, int recv_sockfd){
 		return;
 	}
 
+	printf("INFO: Chat activated!\n");
 
 	while(1){
 	
@@ -76,7 +77,8 @@ void start_Chat(char recv_name[MAX], int send_sockfd, int recv_sockfd){
 
 
 
-		/* Listening on socket no. 0: The client is receiving commands from console */
+		/* Listening on socket no. 0: The sender writes the message in console
+		   and sends it to the receiver by pressing enter */
 		if(FD_ISSET(0, &tmp_fds)){
 			memset(command, 0, MAXLEN);
 		
@@ -89,25 +91,28 @@ void start_Chat(char recv_name[MAX], int send_sockfd, int recv_sockfd){
 				}
 
 				if(strcmp(command,"exit") == 0){
+					printf("INFO: Chat deactivated!\n");
 					return;
 				}
 			}
 		}
 
-		/* Listening on server's socket: The client is receiving data from server */
+		/* Listening on receiver's socket: The initiator of the conversation
+		   is receiving data from his interlocutor */
 		if(FD_ISSET(send_sockfd, &tmp_fds)){
 
 			memset(command, 0, MAXLEN);
 
-			/* Receiving data from server */
+			/* Receiving data from interlocutor */
 			if(recv(recv_sockfd, command, sizeof(command), 0) <= 0){
 				fprintf(stderr,"ERROR: Unable reading from socket!\n");
 				return;
 			}
 
-			if(strcmp(command,"exit") == 0)
+			if(strcmp(command,"exit") == 0){
+				printf("INFO: %s left the conversation!\n", recv_name);
 				return;
-
+			}
 			
 			printf("%s: %s\n", recv_name, command);
 
@@ -158,7 +163,8 @@ void receive_Chat(char send_name[MAX], int send_sockfd, int recv_sockfd){
 
 
 
-		/* Listening on socket no. 0: The client is receiving commands from console */
+		/* Listening on socket no. 0: The receiver writes a message in console
+		   and by pressing enter, he will response to sender */
 		if(FD_ISSET(0, &tmp_fds)){
 			memset(command, 0, MAXLEN);
 		
@@ -171,25 +177,28 @@ void receive_Chat(char send_name[MAX], int send_sockfd, int recv_sockfd){
 				}
 
 				if(strcmp(command,"exit") == 0){
+					printf("INFO: Chat deactivated!\n");
 					return;
 				}
 			}
 		}
 
-		/* Listening on server's socket: The client is receiving data from server */
+		/* Listening on sender's socket: The receiver is receiving data
+		   from the initiator of the conversation */
 		if(FD_ISSET(send_sockfd, &tmp_fds)){
 
 			memset(command, 0, MAXLEN);
 
-			/* Receiving data from server */
+			/* Receiving data from sender */
 			if(recv(recv_sockfd, command, sizeof(command), 0) <= 0){
 				fprintf(stderr,"ERROR: Unable reading from socket!\n");
 				return;
 			}
 
-			if(strcmp(command,"exit") == 0)
+			if(strcmp(command,"exit") == 0){
+				printf("INFO: %s left the conversation!\n", send_name);
 				return;
-
+			}
 			
 			printf("%s: %s\n", send_name, command);
 
