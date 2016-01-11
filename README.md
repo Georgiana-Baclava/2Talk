@@ -7,6 +7,7 @@ The project provides till now the following functionalities:
 - sending/receiving files;
 - changing current directory for every interlocutor on their local machine.
 
+
 ## Usage
 
 ### Compile
@@ -25,6 +26,7 @@ Server must be runned first and then the client!
 - chat: chat
 - cd: cd absolut_path_to_the_directory
 - send file: file-transfer file_name
+
 
 ## TODO
 
