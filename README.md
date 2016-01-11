@@ -16,7 +16,7 @@ make
 
 ### Run
 
-Server must be runned first and then the client!
+First run server, then client!
 
 - SERVER: ./server server_name server_port
 - CLIENT: ./client client_name client_port server_ip server_port
